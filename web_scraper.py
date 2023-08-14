@@ -23,12 +23,10 @@ def newegg_scraper(url, document):
     
     find_text_by_parent = lambda parent, all_words: all_words[0].parent.find(parent).text
     
-    words = document.find_all(string=re.compile("$"))
-    dollar = find_text_by_parent("strong", words)
-    cents = find_text_by_parent("sup", words)
-    true_price = float("".join(d for d in dollar if d != ",") + cents)
+    words = document.select("li.price-current")[0].text.strip("$")
+    true_price = float("".join(d for d in words if d != ","))
     
-    return title, dollar + cents, true_price
+    return title, words, true_price
     
     
 def main():
